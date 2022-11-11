@@ -60,6 +60,42 @@ export const bookmarkReducer = (state, action) => {
         ...state,
         categories: [...state.categories, { ...action.payload }],
       }
+    case 'ADD_PINNED':
+      const pinnedCategory = state.categories.map(category => {
+        if(category.id === action.id) {
+          category.pin = true
+        }
+        return category
+      })
+      const localPinned = {
+        ...state,
+        categories: [...pinnedCategory]
+      }
+      saveLocal('BOOKMARKS', localPinned)
+      return {
+        ...state,
+        categories: [...pinnedCategory]
+      }
+    case 'DELETE_PINNED':
+      const delPinnedCategory = state.categories.map(category => {
+        if(category.id === action.id) {
+          if(category.hasOwnProperty('pin')) {
+            category.pin = false
+          } 
+        }
+        return category
+      })
+      const localDelPinned = {
+        ...state,
+        categories: [...delPinnedCategory]
+      }
+      saveLocal('BOOKMARKS', localDelPinned)
+      return {
+        ...state,
+        categories: [...delPinnedCategory]
+      }
+    case 'DELETE_CATEGORY':
+      break;
     case 'RESET':
       return {
         ...state,

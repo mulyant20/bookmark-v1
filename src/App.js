@@ -7,6 +7,7 @@ import {
   BiTrashAlt,
   BiPlus,
 } from 'react-icons/bi'
+import { AiFillStar, AiOutlineStar } from 'react-icons/ai'
 import Popup from './components/Popup'
 import Button from './components/Button'
 import { getLocal } from './utils/localstorage'
@@ -115,59 +116,158 @@ export default function App() {
   return (
     <div className={style.container}>
       <div className={style.cardWrapper}>
-        {state.categories.map((category) => {
-          return (
-            <div key={category.id} className={style.card}>
-              <p className={style.cardTitle}>{category.value}</p>
-              {state.bookmarks.map((bookmark) => {
-                if (bookmark.category === category.value) {
-                  return (
-                    <div key={bookmark.id} className={style.cardItem}>
-                      <a
-                        className={style.cardLink}
-                        href={bookmark.link}
-                        target='_blank'
-                        rel='noreferrer'
+        <div className='h-fit w-full'>
+          <p className='text-lg font-semibold text-slate-600 mb-6'>Favorites</p>
+          <div className={style.cardWrapper}>
+            {state.categories.map((category) => {
+              if (category['pin'] === true) {
+                return (
+                  <div key={category.id} className={style.card}>
+                    <div className={style.cardTitle}>
+                      <p>{category.value}</p>
+                      <div
+                        className={style.cardPin}
+                        onClick={() => {
+                          category['pin'] === true
+                            ? dispatch({ type: 'DELETE_PINNED', id: category.id })
+                            : dispatch({ type: 'ADD_PINNED', id: category.id })
+                        }}
                       >
-                        {bookmark.title}
-                      </a>
-                      <div className={style.cardActionWrapper}>
-                        <BiDotsVerticalRounded />
-                        <div className={style.cardActionFloat}>
-                          <Button
-                            onclick={() =>
-                              dispatch({ type: 'DELETE', id: bookmark.id })
-                            }
-                            type='cardAction'
-                          >
-                            Delete
-                            <span className={style.cardIcon}>
-                              <BiTrashAlt />
-                            </span>
-                          </Button>
-                          <Button
-                            onclick={() => getBookmarkDetail(bookmark.id)}
-                            type='cardAction'
-                          >
-                            Update
-                            <span className={style.cardIcon}>
-                              <BiEdit />
-                            </span>
-                          </Button>
-                        </div>
+                        {category.hasOwnProperty('pin') &&
+                        category['pin'] === true ? (
+                          <AiFillStar />
+                        ) : (
+                          <AiOutlineStar />
+                        )}
                       </div>
                     </div>
-                  )
-                } else return null
-              })}
-              <Button
-                onclick={() => handlePopup(category.value)}
-                type='btnAddItem'
-              >
-                Add
-              </Button>
-            </div>
-          )
+
+                    {state.bookmarks.map((bookmark) => {
+                      if (bookmark.category === category.value) {
+                        return (
+                          <div key={bookmark.id} className={style.cardItem}>
+                            <a
+                              className={style.cardLink}
+                              href={bookmark.link}
+                              target='_blank'
+                              rel='noreferrer'
+                            >
+                              {bookmark.title}
+                            </a>
+                            <div className={style.cardActionWrapper}>
+                              <BiDotsVerticalRounded />
+                              <div className={style.cardActionFloat}>
+                                <Button
+                                  onclick={() =>
+                                    dispatch({ type: 'DELETE', id: bookmark.id })
+                                  }
+                                  type='cardAction'
+                                >
+                                  Delete
+                                  <span className={style.cardIcon}>
+                                    <BiTrashAlt />
+                                  </span>
+                                </Button>
+                                <Button
+                                  onclick={() => getBookmarkDetail(bookmark.id)}
+                                  type='cardAction'
+                                >
+                                  Update
+                                  <span className={style.cardIcon}>
+                                    <BiEdit />
+                                  </span>
+                                </Button>
+                              </div>
+                            </div>
+                          </div>
+                        )
+                      } else return null
+                    })}
+                    <Button
+                      onclick={() => handlePopup(category.value)}
+                      type='btnAddItem'
+                    >
+                      Add
+                    </Button>
+                  </div>
+                )
+              }
+            })}
+          </div>
+        </div>
+        {state.categories.map((category) => {
+          if (!category.hasOwnProperty('pin') || category['pin'] === false) {
+            return (
+              <div key={category.id} className={style.card}>
+                <div className={style.cardTitle}>
+                  <p>{category.value}</p>
+                  <div
+                    className={style.cardPin}
+                    onClick={() => {
+                      category['pin'] === true
+                        ? dispatch({ type: 'DELETE_PINNED', id: category.id })
+                        : dispatch({ type: 'ADD_PINNED', id: category.id })
+                    }}
+                  >
+                    {category.hasOwnProperty('pin') &&
+                    category['pin'] === true ? (
+                      <AiFillStar />
+                    ) : (
+                      <AiOutlineStar />
+                    )}
+                  </div>
+                </div>
+
+                {state.bookmarks.map((bookmark) => {
+                  if (bookmark.category === category.value) {
+                    return (
+                      <div key={bookmark.id} className={style.cardItem}>
+                        <a
+                          className={style.cardLink}
+                          href={bookmark.link}
+                          target='_blank'
+                          rel='noreferrer'
+                        >
+                          {bookmark.title}
+                        </a>
+                        <div className={style.cardActionWrapper}>
+                          <BiDotsVerticalRounded />
+                          <div className={style.cardActionFloat}>
+                            <Button
+                              onclick={() =>
+                                dispatch({ type: 'DELETE', id: bookmark.id })
+                              }
+                              type='cardAction'
+                            >
+                              Delete
+                              <span className={style.cardIcon}>
+                                <BiTrashAlt />
+                              </span>
+                            </Button>
+                            <Button
+                              onclick={() => getBookmarkDetail(bookmark.id)}
+                              type='cardAction'
+                            >
+                              Update
+                              <span className={style.cardIcon}>
+                                <BiEdit />
+                              </span>
+                            </Button>
+                          </div>
+                        </div>
+                      </div>
+                    )
+                  } else return null
+                })}
+                <Button
+                  onclick={() => handlePopup(category.value)}
+                  type='btnAddItem'
+                >
+                  Add
+                </Button>
+              </div>
+            )
+          }
         })}
         <div className={style.cardNewCategory} onClick={handleAddNewCategory}>
           <BiPlus />
@@ -196,7 +296,9 @@ export default function App() {
           ) : (
             <>
               <form
-                onSubmit={() => {isEdit ? handleUpdated() : handleSave()}}
+                onSubmit={() => {
+                  isEdit ? handleUpdated() : handleSave()
+                }}
                 className={style.form}
               >
                 <input
@@ -217,7 +319,9 @@ export default function App() {
                 />
 
                 <Button
-                  onclick={() => {isEdit ? handleUpdated() : handleSave()}}
+                  onclick={() => {
+                    isEdit ? handleUpdated() : handleSave()
+                  }}
                   type='btnSubmit'
                 >
                   {isEdit ? 'Updated' : 'Save'}
@@ -233,16 +337,24 @@ export default function App() {
 
 const style = {
   container: 'max-w-[1200px] min-h-screen mx-auto pt-8',
-  cardWrapper: 'w-full h-fit flex gap-4 md:gap-12 flex-wrap px-4 md:px-0 items-start',
+  cardWrapper:
+    'w-full h-fit flex gap-4 md:gap-12 flex-wrap px-4 md:px-0 items-start',
   card: 'w-full md:w-64 h-fit p-4 bg-white rounded-lg border border-gray-200',
-  cardTitle: 'text-lg font-semibold text-gray-700 mb-2 border-b border-gray-100',
+  cardTitle:
+    'text-lg font-semibold text-gray-700 pb-1 mb-2 border-b border-gray-100 flex justify-between items-center',
+  cardPin:
+    'p-2 hover:bg-gray-100/80 rounded text-yellow-300 hover:text-yellow-500 flex items-center justify-center cursor-pointer',
   cardItem: 'flex justify-between items-center mt-2',
   cardLink: 'block text-gray-500 hover:text-gray-800',
-  cardActionWrapper: 'relative h-fit w-fit p-[1px] pb-[2px] rounded cursor-pointer hover:bg-gray-100 optionWrapper',
-  cardActionFloat: 'absolute w-28 bottom-[1rem] right-1/2 translate-x-1/2 px-2 bg-gray-100/40 backdrop-blur-sm border border-gray-200 p-2 rounded-lg options shadow shadow-gray-100/70 flex-col gap-[3px] hidden',
+  cardActionWrapper:
+    'relative h-fit w-fit p-[1px] pb-[2px] rounded cursor-pointer hover:bg-gray-100 optionWrapper',
+  cardActionFloat:
+    'absolute w-28 bottom-[1rem] right-1/2 translate-x-1/2 px-2 bg-gray-100/40 backdrop-blur-sm border border-gray-200 p-2 rounded-lg options shadow shadow-gray-100/70 flex-col gap-[3px] hidden',
   cardIcon: 'text-gray-400',
-  cardNewCategory: 'w-full md:w-64 flex flex-col items-center justify-center font-semibold text-2xl h-32 text-gray-300 bg-gray-200/40 rounded-lg border border-gray-200 cursor-pointer',
+  cardNewCategory:
+    'w-full md:w-64 flex flex-col items-center justify-center font-semibold text-2xl h-32 text-gray-300 bg-gray-200/40 rounded-lg border border-gray-200 cursor-pointer',
   textCardNewCategory: 'text-sm font-normal text-gray-600 mt-2',
-  textfield: 'px-4 py-2 bg-gray-100 text-gray-600 rounded outline-none border-2 border-gray-200 focus:border-blue-500',
+  textfield:
+    'px-4 py-2 bg-gray-100 text-gray-600 rounded outline-none border-2 border-gray-200 focus:border-blue-500',
   form: 'flex flex-col gap-y-4 py-8 px-6',
 }
