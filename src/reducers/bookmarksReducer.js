@@ -61,41 +61,78 @@ export const bookmarkReducer = (state, action) => {
         categories: [...state.categories, { ...action.payload }],
       }
     case 'ADD_PINNED':
-      const pinnedCategory = state.categories.map(category => {
-        if(category.id === action.id) {
+      const pinnedCategory = state.categories.map((category) => {
+        if (category.id === action.id) {
           category.pin = true
         }
         return category
       })
       const localPinned = {
         ...state,
-        categories: [...pinnedCategory]
+        categories: [...pinnedCategory],
       }
       saveLocal('BOOKMARKS', localPinned)
       return {
         ...state,
-        categories: [...pinnedCategory]
+        categories: [...pinnedCategory],
       }
     case 'DELETE_PINNED':
-      const delPinnedCategory = state.categories.map(category => {
-        if(category.id === action.id) {
-          if(category.hasOwnProperty('pin')) {
-            category.pin = false
-          } 
+      const delPinnedCategory = state.categories.map((category) => {
+        if (category.id === action.id) {
+          category.pin = false
         }
         return category
       })
       const localDelPinned = {
         ...state,
-        categories: [...delPinnedCategory]
+        categories: [...delPinnedCategory],
       }
       saveLocal('BOOKMARKS', localDelPinned)
       return {
         ...state,
-        categories: [...delPinnedCategory]
+        categories: [...delPinnedCategory],
+      }
+    case 'ARCHIVE':
+      const archiveCategory = state.categories.map((category) => {
+        if (category.id === action.id) {
+          category.archive = true
+        }
+        return category
+      })
+      const localArchive = {
+        ...state,
+        categories: [...archiveCategory],
+      }
+      saveLocal('BOOKMARKS', localArchive)
+      return {
+        ...state,
+        categories: [...archiveCategory],
+      }
+    case 'UNARCHIVE':
+      const unArchiveCategory = state.categories.map((category) => {
+        if (category.id === action.id) {
+          category.archive = false
+        }
+        return category
+      })
+      const localUnarchive = {
+        ...state,
+        categories: [...unArchiveCategory],
+      }
+      saveLocal('BOOKMARKS', localUnarchive)
+      return {
+        ...state,
+        categories: [...unArchiveCategory],
       }
     case 'DELETE_CATEGORY':
-      break;
+      const delCategory = state.categories.filter((category) => {
+        return category.id !== action.id
+      })
+      saveLocal('BOOKMARKS', delCategory)
+      return {
+        ...state,
+        categories: [...delCategory],
+      }
     case 'RESET':
       return {
         ...state,
@@ -109,7 +146,7 @@ export const bookmarkReducer = (state, action) => {
       break
     case 'RESTORE':
       return {
-        ...action.payload
+        ...action.payload,
       }
     default:
       return state
