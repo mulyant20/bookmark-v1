@@ -14,10 +14,10 @@ export default function bookmark({ dataBookmarks }) {
     deleteItem
   } = UseBookmarkContext()
 
-  const editBookmark = (payload) => {
+  const editBookmark = (payload, id) => {
     getBookmarkDetail(payload)
     setType('EDIT')
-    setCategory(payload.id)
+    setCategory(id)
   }
 
   const handleAdd = (category) => {
@@ -78,7 +78,7 @@ export default function bookmark({ dataBookmarks }) {
                         {bookmark.title}
                       </a>
                       <div className='flex gap-1 absolute -right-10 -translate-y-1/2 top-1/2 bookmarkEdit duration-150'>
-                        <div className='cursor-pointer hover:text-purple-800' onClick={() => editBookmark(bookmark)}>
+                        <div className='cursor-pointer hover:text-purple-800' onClick={() => editBookmark(bookmark, data.id)}>
                           <BiEditAlt />
                         </div>
                         <div className='cursor-pointer hover:text-red-500 text-[18px]' onClick={() => deleteItem(bookmark.id)}>

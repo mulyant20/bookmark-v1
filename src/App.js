@@ -59,7 +59,7 @@ export default function App() {
     setMenus(newMenu)
 
     return () => menus
-  }, [menus, selectedMenus])
+  }, [selectedMenus])
 
 
   return (
