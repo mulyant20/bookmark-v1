@@ -6,7 +6,7 @@ export default function filterBookmark(categories, bookmarks, type) {
       if (favoriteCategories.length > 0) {
         const dataFavorites = favoriteCategories.map((category) => {
           const data = bookmarks.filter((bookmark) => {
-            return bookmark.category === category.value
+            return bookmark.category === category.id
           })
 
           return {
@@ -20,11 +20,11 @@ export default function filterBookmark(categories, bookmarks, type) {
         return null
       }
     case 'ARCHIVES':
-      const archivesCategories = categories.filter((category) => category['archive'] == true)
+      const archivesCategories = categories.filter((category) => category['archive'] === true)
       if(archivesCategories.length > 0) {
         const dataArchives = archivesCategories.map((category) => {
           const data = bookmarks.filter((bookmark) => {
-            return bookmark.category === category.value
+            return bookmark.category === category.id
           })
 
           return {
@@ -49,7 +49,7 @@ export default function filterBookmark(categories, bookmarks, type) {
       const defaultBookmark = defaultCategories.map((category) => {
         const data = bookmarks.filter((bookmark) => {
           return (
-            bookmark.category !== null && bookmark.category === category.value
+            bookmark.category !== null && bookmark.category === category.id
           )
         })
 

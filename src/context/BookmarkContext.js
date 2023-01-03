@@ -87,13 +87,14 @@ export const BookmarkProvider = ({ children }) => {
 
   const handleUpdated = () => {
     if(state.type !== '' && state.type === 'EDIT') {
+      const categorySelected = state.category.filter((category) => category.id === state.selectedCategory)
       dispatch({
         type: 'EDIT',
         payload: {
           id: state.id,
           link: state.link,
           title: state.title,
-          category: state.selectedCategory
+          category: `${categorySelected.value}`
         }
       })
       reset()
@@ -117,6 +118,13 @@ export const BookmarkProvider = ({ children }) => {
     dispatch({ type: 'RESET' })
   }
 
+  const deleteItem = (id) => {
+    dispatch({
+      type: 'DELETE',
+      id
+    })
+  }
+
   const value = {
     ...state,
     restore,
@@ -129,7 +137,8 @@ export const BookmarkProvider = ({ children }) => {
     handleUpdated,
     setType,
     setCategory,
-    addNewCategory
+    addNewCategory,
+    deleteItem
   }
 
   return (

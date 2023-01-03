@@ -6,6 +6,7 @@ export const bookmarkState = {
   title: '',
   category: '',
   newCategory: '',
+  selectedCategory: '',
   type: '',
   isOpen: false,
   bookmarks: [],

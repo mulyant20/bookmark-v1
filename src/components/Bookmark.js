@@ -3,20 +3,29 @@ import { BiArchiveOut, BiArchiveIn, BiEditAlt, BiX } from 'react-icons/bi'
 import { UseBookmarkContext } from '../context/BookmarkContext'
 
 export default function bookmark({ dataBookmarks }) {
-  const { isOpen, handlePopup, handlePin, handleArchive, getBookmarkDetail, setType, setCategory } = UseBookmarkContext()
+  const {
+    isOpen,
+    handlePopup,
+    handlePin,
+    handleArchive,
+    getBookmarkDetail,
+    setType,
+    setCategory,
+    deleteItem
+  } = UseBookmarkContext()
 
   const editBookmark = (payload) => {
     getBookmarkDetail(payload)
     setType('EDIT')
-    setCategory(payload.category)
+    setCategory(payload.id)
   }
 
   const handleAdd = (category) => {
-    if(!isOpen) {
+    if (!isOpen) {
       setType('SAVE')
       setCategory(category)
       handlePopup()
-    } 
+    }
   }
 
   if (typeof dataBookmarks !== 'undefined' && dataBookmarks !== null) {
@@ -33,14 +42,12 @@ export default function bookmark({ dataBookmarks }) {
                 <div className='flex gap-2'>
                   <div
                     onClick={() => {
-                      !data.hasOwnProperty('archive') ||
                       data['archive'] === true
                         ? handleArchive(data.id, 'unarchive')
                         : handleArchive(data.id, 'archive')
                     }}
                   >
-                    {!data.hasOwnProperty('archive') ||
-                    data['archive'] === true ? (
+                    {data['archive'] === true ? (
                       <BiArchiveOut />
                     ) : (
                       <BiArchiveIn />
@@ -48,16 +55,12 @@ export default function bookmark({ dataBookmarks }) {
                   </div>
                   <div
                     onClick={() => {
-                      !data.hasOwnProperty('pin') || data['pin'] === true
+                      data['pin'] === true
                         ? handlePin(data.id)
                         : handlePin(data.id, 'pin')
                     }}
                   >
-                    {!data.hasOwnProperty('pin') || data['pin'] === true ? (
-                      <AiFillStar />
-                    ) : (
-                      <AiOutlineStar />
-                    )}
+                    {data['pin'] === true ? <AiFillStar /> : <AiOutlineStar />}
                   </div>
                 </div>
               </div>
@@ -65,7 +68,7 @@ export default function bookmark({ dataBookmarks }) {
               {data.bookmarks !== null &&
                 data.bookmarks.map((bookmark) => {
                   return (
-                    <div key={bookmark.id} className='w-full h-fit relative'>
+                    <div key={bookmark.id} className='w-full h-fit relative my-2 hover:bg-gray-100 px-4 py-2 rounded overflow-hidden bookmarkItem'>
                       <a
                         className=''
                         href={bookmark.link}
@@ -74,18 +77,23 @@ export default function bookmark({ dataBookmarks }) {
                       >
                         {bookmark.title}
                       </a>
-                      <div className='flex gap-1'>
-                        <div onClick={() => editBookmark(bookmark)}>
+                      <div className='flex gap-1 absolute -right-10 -translate-y-1/2 top-1/2 bookmarkEdit duration-150'>
+                        <div className='cursor-pointer hover:text-purple-800' onClick={() => editBookmark(bookmark)}>
                           <BiEditAlt />
                         </div>
-                        <div>
+                        <div className='cursor-pointer hover:text-red-500 text-[18px]' onClick={() => deleteItem(bookmark.id)}>
                           <BiX />
                         </div>
                       </div>
                     </div>
                   )
                 })}
-              <button className='w-full bg-gray-100' onClick={() => handleAdd(data.value)}>Tambah</button>
+              <button
+                className='w-full bg-gray-100 mt-2 rounded py-[4px]'
+                onClick={() => handleAdd(data.id)}
+              >
+                Tambah
+              </button>
             </div>
           )
         })}

@@ -1,10 +1,9 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { getLocal } from './utils/localstorage'
 import Bookmark from './components/Bookmark'
 import { UseBookmarkContext } from './context/BookmarkContext'
 import filterBookmark from './utils/filterBookmark'
 import Popup from './components/Popup'
-import Segment from './components/Segment'
 import Navbar from './components/Navbar'
 
 const initMenus = [
@@ -24,7 +23,6 @@ const initMenus = [
 
 export default function App() {
   const { restore, categories, bookmarks, isOpen } = UseBookmarkContext()
-  const [isLoading, setIsLoading] = useState(true)
   const [menus, setMenus] = useState(initMenus)
   const [selectedMenus, setSelectedMenus] = useState('favorites')
 
@@ -32,7 +30,6 @@ export default function App() {
     const payload = JSON.parse(getLocal('BOOKMARKS'))
     if (payload) {
       restore(payload)
-      setIsLoading(false)
     }
     // eslint-disable-next-line
   }, [])
@@ -62,7 +59,7 @@ export default function App() {
     setMenus(newMenu)
 
     return () => menus
-  }, [selectedMenus])
+  }, [menus, selectedMenus])
 
 
   return (
