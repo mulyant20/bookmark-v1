@@ -3,15 +3,13 @@ import { BiArchiveOut, BiArchiveIn, BiEditAlt, BiX } from 'react-icons/bi'
 import { UseBookmarkContext } from '../context/BookmarkContext'
 
 export default function bookmark({ dataBookmarks }) {
-  const { isOpen, handlePopup, handlePin, handleArchive, getBookmarkDetail, setType, setCategory, title, link, category } = UseBookmarkContext()
+  const { isOpen, handlePopup, handlePin, handleArchive, getBookmarkDetail, setType, setCategory } = UseBookmarkContext()
 
   const editBookmark = (payload) => {
     getBookmarkDetail(payload)
     setType('EDIT')
     setCategory(payload.category)
   }
-
-  console.log(title, link, category)
 
   const handleAdd = (category) => {
     if(!isOpen) {
@@ -28,7 +26,7 @@ export default function bookmark({ dataBookmarks }) {
           return (
             <div
               key={data.id}
-              className='p-4 rounded-lg bg-white w-40 h-fit min-h-32'
+              className='p-4 rounded-lg bg-white h-fit min-h-32 border border-gray-200/70'
             >
               <div className='flex justify-between'>
                 <p>{data.value}</p>

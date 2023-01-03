@@ -3,18 +3,28 @@ import Button from './Button'
 
 export default function Popup() {
   const bookmarkContext = UseBookmarkContext()
-  
+
   return (
     <div className={style.popupWrapper}>
-      <div className={style.popupLayer} onClick={bookmarkContext.handlePopup}></div>
-      <div className={style.popup}>
-        {Form(bookmarkContext)}
-      </div>
+      <div
+        className={style.popupLayer}
+        onClick={bookmarkContext.handlePopup}
+      ></div>
+      <div className={style.popup}>{Form(bookmarkContext)}</div>
     </div>
   )
 }
 
-const Form = ({ type, handleSave, title, link, handleChange, handleUpdated, newCategory, addNewCategory }) => {
+const Form = ({
+  type,
+  handleSave,
+  title,
+  link,
+  handleChange,
+  handleUpdated,
+  newCategory,
+  addNewCategory,
+}) => {
   switch (type) {
     case 'SAVE':
       return (
@@ -72,22 +82,23 @@ const Form = ({ type, handleSave, title, link, handleChange, handleUpdated, newC
       )
 
     case 'NEW_CATEGORY':
-      ;<>
-        <form onSubmit={addNewCategory} className={style.form}>
-          <input
-            name='newCategory'
-            onChange={handleChange}
-            value={newCategory}
-            placeholder='Category name'
-            className={style.textfield}
-            autoFocus
-          />
-          <Button onclick={addNewCategory} type='btnSubmit'>
-            Save
-          </Button>
-        </form>
-      </>
-      break
+      return (
+        <>
+          <form onSubmit={addNewCategory} className={style.form}>
+            <input
+              name='newCategory'
+              onChange={handleChange}
+              value={newCategory}
+              placeholder='Category name'
+              className={style.textfield}
+              autoFocus
+            />
+            <Button onclick={addNewCategory} type='btnSubmit'>
+              Save
+            </Button>
+          </form>
+        </>
+      )
     default:
       return 'tidak ada'
   }

@@ -101,6 +101,18 @@ export const BookmarkProvider = ({ children }) => {
     }
   }
 
+  const addNewCategory = (e) => {
+    e.preventDefault()
+    dispatch({
+      type: 'ADD_CATEGORIES',
+      payload: {
+        id: nanoid(),
+        value: state.newCategory,
+      },
+    })
+    reset()
+  }
+
   const reset = () => {
     dispatch({ type: 'RESET' })
   }
@@ -116,7 +128,8 @@ export const BookmarkProvider = ({ children }) => {
     handleSave,
     handleUpdated,
     setType,
-    setCategory
+    setCategory,
+    addNewCategory
   }
 
   return (
