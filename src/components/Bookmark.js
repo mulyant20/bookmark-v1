@@ -37,10 +37,11 @@ export default function bookmark({ dataBookmarks }) {
               key={data.id}
               className='p-4 rounded-lg bg-white h-fit min-h-32 border border-gray-200/70'
             >
-              <div className='flex justify-between mb-2'>
+              <div className='flex justify-between items-center mb-2'>
                 <p className='text-gray-600 font-semibold'>{data.value}</p>
                 <div className='flex gap-2'>
                   <div
+                  className='p-2 hover:bg-gray-100/80 rounded text-gray-400 hover:text-gray-800 flex items-center justify-center cursor-pointer'
                     onClick={() => {
                       data['archive'] === true
                         ? handleArchive(data.id, 'unarchive')
@@ -54,6 +55,7 @@ export default function bookmark({ dataBookmarks }) {
                     )}
                   </div>
                   <div
+                  className='p-2 hover:bg-gray-100/80 rounded text-yellow-300 hover:text-yellow-500 flex items-center justify-center cursor-pointer'
                     onClick={() => {
                       data['pin'] === true
                         ? handlePin(data.id)
