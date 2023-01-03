@@ -6,6 +6,8 @@ export const bookmarkState = {
   title: '',
   category: '',
   newCategory: '',
+  type: '',
+  isOpen: false,
   bookmarks: [],
   categories: [],
 }
@@ -45,10 +47,10 @@ export const bookmarkReducer = (state, action) => {
     case 'GET_DETAIL':
       return {
         ...state,
-        id: action.payload[0].id,
-        link: action.payload[0].link,
-        title: action.payload[0].title,
-        category: action.payload[0].category,
+        id: action.payload.id,
+        link: action.payload.link,
+        title: action.payload.title,
+        category: action.payload.category,
       }
     case 'ADD_CATEGORIES':
       const newCategories = {
@@ -134,20 +136,30 @@ export const bookmarkReducer = (state, action) => {
         categories: [...delCategory],
       }
     case 'RESET':
-      return {
+      const resetLocal = {
         ...state,
-        id: null,
+        id: '',
         link: '',
         title: '',
         category: '',
         newCategory: '',
+        selectedCategory: '',
+        type: '',
+        isOpen: false,
       }
-    case 'DELETED_CATEGORY':
-      break
+      saveLocal('BOOKMARKS', resetLocal)
+      return resetLocal
     case 'RESTORE':
       return {
         ...action.payload,
+        isOpen: false,
       }
+    case 'HANDLE_ISOPEN':
+      return { ...state, isOpen: !state.isOpen }
+    case 'SET_CATEGORY':
+      return { ...state, selectedCategory: action.value }
+    case 'SET_TYPE':
+      return { ...state, type: action.value }
     default:
       return state
   }

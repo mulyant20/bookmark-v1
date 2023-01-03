@@ -26,8 +26,7 @@ export default function filterBookmark(categories, bookmarks, type) {
       const defaultCategories = categories.filter((category) => {
         return (
           (!category.hasOwnProperty('pin') || category['pin'] === false) &&
-          (!category.hasOwnProperty('archives') ||
-            category['archives'] === false)
+          (!category.hasOwnProperty('archive') || category['archive'] === false)
         )
       })
 

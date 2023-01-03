@@ -3,7 +3,23 @@ import { BiArchiveOut, BiArchiveIn, BiEditAlt, BiX } from 'react-icons/bi'
 import { UseBookmarkContext } from '../context/BookmarkContext'
 
 export default function bookmark({ dataBookmarks }) {
-  const { handlePin, handleArchive, getBookmarkDetail } = UseBookmarkContext()
+  const { isOpen, handlePopup, handlePin, handleArchive, getBookmarkDetail, setType, setCategory, title, link, category } = UseBookmarkContext()
+
+  const editBookmark = (payload) => {
+    getBookmarkDetail(payload)
+    setType('EDIT')
+    setCategory(payload.category)
+  }
+
+  console.log(title, link, category)
+
+  const handleAdd = (category) => {
+    if(!isOpen) {
+      setType('SAVE')
+      setCategory(category)
+      handlePopup()
+    } 
+  }
 
   if (typeof dataBookmarks !== 'undefined' && dataBookmarks !== null) {
     return (
@@ -61,7 +77,7 @@ export default function bookmark({ dataBookmarks }) {
                         {bookmark.title}
                       </a>
                       <div className='flex gap-1'>
-                        <div onClick={() => getBookmarkDetail(bookmark)}>
+                        <div onClick={() => editBookmark(bookmark)}>
                           <BiEditAlt />
                         </div>
                         <div>
@@ -71,6 +87,7 @@ export default function bookmark({ dataBookmarks }) {
                     </div>
                   )
                 })}
+              <button className='w-full bg-gray-100' onClick={() => handleAdd(data.value)}>Tambah</button>
             </div>
           )
         })}

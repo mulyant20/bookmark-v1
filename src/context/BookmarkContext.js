@@ -1,3 +1,4 @@
+import { nanoid } from 'nanoid'
 import { createContext, useReducer, useContext } from 'react'
 import { bookmarkReducer, bookmarkState } from '../reducers/bookmarksReducer'
 
@@ -13,6 +14,7 @@ export const BookmarkProvider = ({ children }) => {
       dispatch({ type: 'DELETE_PINNED', id })
     }
   }
+
   const handleArchive = (id, type) => {
     if (type === 'archive') {
       dispatch({ type: 'ARCHIVE', id })
@@ -20,24 +22,101 @@ export const BookmarkProvider = ({ children }) => {
       dispatch({ type: 'UNARCHIVE', id })
     }
   }
+
   const restore = (payload) => {
     dispatch({
       type: 'RESTORE',
-      payload
+      payload,
     })
   }
 
+  const getBookmarkDetail = (payload) => {
+    handlePopup()
+    dispatch({
+      type: 'GET_DETAIL',
+      payload,
+    })
+  }
+
+  const handlePopup = () => {
+    if(state.isOpen) {
+      reset()
+      return
+    }
+    dispatch({
+      type: 'HANDLE_ISOPEN',
+    })
+    
+  }
+
+  const handleChange = (e) => {
+    const { name, value } = e.target
+    dispatch({
+      type: 'HANDLE_CHANGE',
+      name,
+      value,
+    })
+  }
+
+  const handleSave = () => {
+    dispatch({
+      type: 'SAVE',
+      payload: {
+        id: nanoid(),
+        link: state.link,
+        title: state.title,
+        category: state.selectedCategory,
+      },
+    })
+    reset()
+  }
+
+  const setCategory = (value) => {
+    dispatch({
+      type: 'SET_CATEGORY',
+      value
+    })
+  }
+
+  const setType = (value) => {
+    dispatch({
+      type: 'SET_TYPE',
+      value
+    })
+  }
+
+  const handleUpdated = () => {
+    if(state.type !== '' && state.type === 'EDIT') {
+      dispatch({
+        type: 'EDIT',
+        payload: {
+          id: state.id,
+          link: state.link,
+          title: state.title,
+          category: state.selectedCategory
+        }
+      })
+      reset()
+      handlePopup()
+    }
+  }
+
+  const reset = () => {
+    dispatch({ type: 'RESET' })
+  }
+
   const value = {
-    bookmarks: state.bookmarks,
-    categories: state.categories,
-    id: state.id,
-    link: state.link,
-    title: state.title,
-    category: state.category,
-    newCategory: state.newCategory,
+    ...state,
     restore,
     handlePin,
     handleArchive,
+    getBookmarkDetail,
+    handlePopup,
+    handleChange,
+    handleSave,
+    handleUpdated,
+    setType,
+    setCategory
   }
 
   return (

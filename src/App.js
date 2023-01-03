@@ -3,9 +3,10 @@ import { getLocal } from './utils/localstorage'
 import Bookmark from './components/Bookmark'
 import { UseBookmarkContext } from './context/BookmarkContext'
 import filterBookmark from './utils/filterBookmark'
+import Popup from './components/Popup'
 
 export default function App() {
-  const { restore, categories, bookmarks } = UseBookmarkContext()
+  const { restore, categories, bookmarks, isOpen } = UseBookmarkContext()
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
@@ -26,16 +27,24 @@ export default function App() {
   }, [categories, bookmarks])
 
   return (
-    <div className='w-full px-8 pt-20'>
-      <div className='border-b border-gray-300 mb-10'>
-        <p className='w-full mb-8 text-2xl text-gray-500'>Favorites</p>
+    <div className={style.container}>
+      <div className={style.favorites}>
+        <p className={style.title}>Favorites</p>
         <div>
           {!isLoading ? <Bookmark dataBookmarks={getFavorites} /> : null}
         </div>
       </div>
-      <div className='flex justify-between flex-wrap'>
+      <div className={style.default}>
         {!isLoading ? <Bookmark dataBookmarks={getBookmarks} /> : null}
       </div>
+      {isOpen ? <Popup /> : null}
     </div>
   )
+}
+
+const style = {
+  container: 'w-full px-8 pt-20',
+  favorites: 'border-b border-gray-300 mb-10',
+  title: 'w-full mb-8 text-2xl text-gray-500',
+  default: 'flex justify-between flex-wrap',
 }
