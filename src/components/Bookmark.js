@@ -37,8 +37,8 @@ export default function bookmark({ dataBookmarks }) {
               key={data.id}
               className='p-4 rounded-lg bg-white h-fit min-h-32 border border-gray-200/70'
             >
-              <div className='flex justify-between'>
-                <p>{data.value}</p>
+              <div className='flex justify-between mb-2'>
+                <p className='text-gray-600 font-semibold'>{data.value}</p>
                 <div className='flex gap-2'>
                   <div
                     onClick={() => {

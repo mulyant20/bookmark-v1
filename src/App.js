@@ -59,6 +59,7 @@ export default function App() {
     setMenus(newMenu)
 
     return () => menus
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedMenus])
 
 
