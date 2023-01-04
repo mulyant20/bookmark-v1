@@ -13,7 +13,7 @@ const initMenus = [
   },
   {
     value: 'favorites',
-    isActive: true,
+    isActive: false,
   },
   {
     value: 'archives',
