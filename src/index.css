@@ -9,3 +9,7 @@ body {
 .optionWrapper:hover > .options{
     display: flex;
 }
+
+.bookmarkItem:hover > .bookmarkEdit {
+    right: 4px;
+}

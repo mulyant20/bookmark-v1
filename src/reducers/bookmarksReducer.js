@@ -6,6 +6,9 @@ export const bookmarkState = {
   title: '',
   category: '',
   newCategory: '',
+  selectedCategory: '',
+  type: '',
+  isOpen: false,
   bookmarks: [],
   categories: [],
 }
@@ -45,10 +48,10 @@ export const bookmarkReducer = (state, action) => {
     case 'GET_DETAIL':
       return {
         ...state,
-        id: action.payload[0].id,
-        link: action.payload[0].link,
-        title: action.payload[0].title,
-        category: action.payload[0].category,
+        id: action.payload.id,
+        link: action.payload.link,
+        title: action.payload.title,
+        category: action.payload.category,
       }
     case 'ADD_CATEGORIES':
       const newCategories = {
@@ -61,56 +64,103 @@ export const bookmarkReducer = (state, action) => {
         categories: [...state.categories, { ...action.payload }],
       }
     case 'ADD_PINNED':
-      const pinnedCategory = state.categories.map(category => {
-        if(category.id === action.id) {
+      const pinnedCategory = state.categories.map((category) => {
+        if (category.id === action.id) {
           category.pin = true
         }
         return category
       })
       const localPinned = {
         ...state,
-        categories: [...pinnedCategory]
+        categories: [...pinnedCategory],
       }
       saveLocal('BOOKMARKS', localPinned)
       return {
         ...state,
-        categories: [...pinnedCategory]
+        categories: [...pinnedCategory],
       }
     case 'DELETE_PINNED':
-      const delPinnedCategory = state.categories.map(category => {
-        if(category.id === action.id) {
-          if(category.hasOwnProperty('pin')) {
-            category.pin = false
-          } 
+      const delPinnedCategory = state.categories.map((category) => {
+        if (category.id === action.id) {
+          category.pin = false
         }
         return category
       })
       const localDelPinned = {
         ...state,
-        categories: [...delPinnedCategory]
+        categories: [...delPinnedCategory],
       }
       saveLocal('BOOKMARKS', localDelPinned)
       return {
         ...state,
-        categories: [...delPinnedCategory]
+        categories: [...delPinnedCategory],
       }
-    case 'DELETE_CATEGORY':
-      break;
-    case 'RESET':
+    case 'ARCHIVE':
+      const archiveCategory = state.categories.map((category) => {
+        if (category.id === action.id) {
+          category.archive = true
+        }
+        return category
+      })
+      const localArchive = {
+        ...state,
+        categories: [...archiveCategory],
+      }
+      saveLocal('BOOKMARKS', localArchive)
       return {
         ...state,
-        id: null,
+        categories: [...archiveCategory],
+      }
+    case 'UNARCHIVE':
+      const unArchiveCategory = state.categories.map((category) => {
+        if (category.id === action.id) {
+          category.archive = false
+        }
+        return category
+      })
+      const localUnarchive = {
+        ...state,
+        categories: [...unArchiveCategory],
+      }
+      saveLocal('BOOKMARKS', localUnarchive)
+      return {
+        ...state,
+        categories: [...unArchiveCategory],
+      }
+    case 'DELETE_CATEGORY':
+      const delCategory = state.categories.filter((category) => {
+        return category.id !== action.id
+      })
+      saveLocal('BOOKMARKS', delCategory)
+      return {
+        ...state,
+        categories: [...delCategory],
+      }
+    case 'RESET':
+      const resetLocal = {
+        ...state,
+        id: '',
         link: '',
         title: '',
         category: '',
         newCategory: '',
+        selectedCategory: '',
+        type: '',
+        isOpen: false,
       }
-    case 'DELETED_CATEGORY':
-      break
+      saveLocal('BOOKMARKS', resetLocal)
+      return resetLocal
     case 'RESTORE':
       return {
-        ...action.payload
+        ...action.payload,
+        isOpen: false,
       }
+    case 'HANDLE_ISOPEN':
+      return { ...state, isOpen: !state.isOpen }
+    case 'SET_CATEGORY':
+      return { ...state, selectedCategory: action.value }
+    case 'SET_TYPE':
+      return { ...state, type: action.value }
     default:
       return state
   }
