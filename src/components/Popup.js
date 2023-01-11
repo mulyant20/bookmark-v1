@@ -111,5 +111,5 @@ const style = {
     'w-[400px] max-w-full h-fit mx-auto bg-white rounded mt-32 mx-auto absolute top-20 left-1/2 -translate-y-1/2 -translate-x-1/2 z-20',
   textfield:
     'px-4 py-2 bg-gray-100 text-gray-600 rounded outline-none border-2 border-gray-200 focus:border-blue-500',
-  form: 'flex flex-col gap-y-4 py-8 px-6',
+  form: 'flex flex-col gap-y-4 py-8 px-6 z-20',
 }
